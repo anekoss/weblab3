@@ -1,0 +1,52 @@
+.clock {
+    padding-top: 4em;
+    text-align: center;
+    font-size: 40px;
+    /*font-weight: bold;*/
+    font-family: "Impact", fantasy;
+    color: #faf8ed;
+    text-shadow: 2px 2px 2px #5F4393;
+
+}
+
+.startButton {
+    text-align: center;
+    padding-top: 2em;
+    text-shadow: 2px 2px 2px #8BDFE2;
+
+}
+
+body {
+    margin: 0;
+    font-size: 18px;
+    font-family: "Open Sans", "Arial", sans-serif;
+}
+
+.leftItem {
+    float: left;
+}
+
+.rightItem {
+    float: right;
+}
+
+.startButtonLink {
+    display: inline-block;
+    padding: 0.5em 1em;
+    width: auto;
+    background: #faf8ed;
+    font-family: "Impact", fantasy;
+    border: 2px rgba(0, 0, 0, 0.7) solid;
+    border-radius: 8px 8px 8px 8px;
+    text-decoration: none;
+    font-size: 18px;
+    /*font-weight: bold;*/
+    color: #5F4393;
+    /*background-color: #5F4393;*/
+}
+
+.startButtonLink:hover {
+    background-color: #5f4393bf;
+    color: #faf8ed;
+
+}

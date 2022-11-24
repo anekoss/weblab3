@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="WEB-INF/templates/master.xhtml">
+    <ui:define name="head">
+        <h:outputStylesheet library="css" name="main.css"/>
+        <h:outputStylesheet library="css" name="index.css"/>
+        <title>Web №3 - Main Page</title>
+    </ui:define>
+    <ui:define name="mainBody">
+        <table id="pageTable">
+            <tr>
+                <td class="content" id="values" colspan="1">
+                    <h:form id="hidden_form" style="display: none">
+                        <p:inputText styleClass="pointX" value="#{pointsBean.xFromCanvas}"/>
+                        <p:inputText styleClass="pointY" value="#{pointsBean.yFromCanvas}"/>
+                        <p:inputText styleClass="pointR" value="#{pointsBean.rFromCanvas}"/>
+                        <p:commandButton styleClass="submitCanvas" process="@form" type="Submit"
+                                         action="#{pointsBean.addResultFromCanvasToDB}" value="Check"
+                                         update="resultsTable" oncomplete="redrawPoints()"/>
+                    </h:form>
+                    <h:form id="input_form">
+                        <table id="input">
+                            <tr>
+                                <td class="input_label">
+                                    <h:outputLabel styleClass="input_label_x" value="Значение X: "/>
+                                </td>
+                                <td class="input_value">
+                                    <h:selectOneRadio id="radio" styleClass="center_labeled" value="#{pointsBean.x}">
+                                        <f:selectItem itemLabel="-3" itemValue="-3" id="x1"/>
+                                        <f:selectItem itemLabel="-2" itemValue="-2" id="x2"/>
+                                        <f:selectItem itemLabel="-1" itemValue="-1" id="x3"/>
+                                        <f:selectItem itemLabel="0" itemValue="0" id="x4"/>
+                                        <f:selectItem itemLabel="1" itemValue="1" id="x5"/>
+                                        <f:selectItem itemLabel="2" itemValue="2" id="x6"/>
+                                        <f:selectItem itemLabel="3" itemValue="3" id="x7"/>
+                                        <f:selectItem itemLabel="4" itemValue="4" id="x8"/>
+                                        <f:selectItem itemLabel="5" itemValue="5" id="x9"/>
+                                    </h:selectOneRadio>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="input_label">
+                                    <h:outputLabel value="Значение Y: "/>
+                                </td>
+                                <td class="input_value">
+                                    <p:inputText id="y_input" maxlength="10" a:placeholder="Number from -5 to 5..."
+                                                 value="#{pointsBean.y}">
+                                        <f:validateDoubleRange minimum="-5" maximum="5"/>
+                                    </p:inputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="input_label">
+                                    <h:outputLabel value="Значение R: "/>
+                                </td>
+                                <td class="input_value">
+                                    <p:inputText id="r_input" maxlength="10" a:placeholder="Number from 1 to 4..."
+                                                 value="#{pointsBean.r}" onchange="check()">
+                                        <f:validateDoubleRange minimum="1" maximum="4"/>
+                                        <f:ajax render="r_input" />
+                                    </p:inputText>
+                                    <p:inputText type="hidden" id="r_slider" styleClass="slider" for="r_input">
+                                        <f:ajax event="input" listener="#{pointsBean.r}"
+                                        />
+                                    </p:inputText>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="buttonsForm">
+                            <p:commandButton process="@form" styleClass="button" id="checkButton" type="Submit"
+                                             action="#{pointsBean.addResultToDB}" value="Проверить"
+                                             update="resultsTable"
+                                             onclick="validateValues()" oncomplete="redrawPoints()"/><br/>
+                        </div>
+                    </h:form>
+                    <div class="buttons">
+                        <p:commandButton styleClass="buttonClear" id="clearButton" action="#{pointsBean.clearTable}"
+                                         value="Очистить таблицу"
+                                         update="resultsTable" oncomplete="clearPointsFromCanvas()"/><br/>
+                        <div class="startButton">
+                            <h:link styleClass="startButtonLink" outcome="directIndex">
+                                Перейти на <br/>стартовую страницу
+                            </h:link>
+                        </div>
+                    </div>
+                    <div id="messageArea">
+                    </div>
+                </td>
+                <td id="graph">
+                    <div class="graph_image">
+                        <canvas id="canvas" width="400" height="400"
+                                style="margin-left: 130%; margin-top: 7%;margin-bottom: 5%"></canvas>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="contentTable" id="table" colspan="2">
+                    <h:dataTable id="resultsTable" styleClass="resultTable" value="#{pointsBean.pointResultList}"
+                                 var="point">
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">X</f:facet>
+                            <h:outputText styleClass="xVal" value="#{point.x}"/>
+                        </h:column>
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">Y</f:facet>
+                            <h:outputText styleClass="yVal" value="#{point.y}"/>
+                        </h:column>
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">R</f:facet>
+                            <h:outputText styleClass="rVal" value="#{point.r}"/>
+                        </h:column>
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">Current time</f:facet>
+                            <h:outputText value="#{point.time}"/>
+                        </h:column>
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">Validate</f:facet>
+                            <h:outputText value="#{point.valid}"/>
+                        </h:column>
+                        <h:column headerClass="table_header">
+                            <f:facet name="header">Hit</f:facet>
+                            <h:outputText styleClass="hitres" value="#{point.hit}"/>
+                        </h:column>
+                    </h:dataTable>
+
+                </td>
+            </tr>
+        </table>
+        <h:outputScript library="js" name="main.js"/>
+        <h:outputScript library="js" name="drawCanvas.js"/>
+    </ui:define>
+</ui:composition>
+</html>

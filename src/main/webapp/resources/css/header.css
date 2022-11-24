@@ -1,0 +1,33 @@
+.creator tr td {
+    font-size: 30px;
+    height: 35px;
+
+    text-shadow: 2px 2px 2px #8BDFE2;
+    background: #faf8ed;
+    border: 2px #5F4393 solid;
+    border-radius: 8px 8px 8px 8px;
+    margin-right: 5%;
+    margin-left: 5%;
+    margin-bottom: 1%;
+}
+
+
+.creator {
+    margin-top: 1%;
+    font-family: "Impact", fantasy;
+    border-spacing: 30px 5px;
+    width: 100%;
+    text-align: center;
+}
+
+.creator .student {
+    width: 40%;
+}
+
+.creator .group {
+    width: 30%;
+}
+
+.creator .variant {
+    width: 30%;
+}
